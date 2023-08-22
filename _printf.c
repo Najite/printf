@@ -1,56 +1,52 @@
-#include <stdio.h>
-#include "main.h"
-
 /**
- * _printf - Custom printf function with limited conversion specifiers
- * @format: The format string containing directives
- * @...: Additional arguments for the directives
+ * _printf - produces output according to a format
+ * @format: character string composed of zero or more directives
  *
- * Return: The number of characters printed (excluding null byte)
+ * Return: the number of characters printed (excluding the null byte used to end output to strings)
  */
 int _printf(const char *format, ...)
 {
 	va_list args;
-	int count = 0;
-	va_start(args, format);
+	int i = 0, count = 0;
+	char *str;
 
-	while (*format)
+	va_start(args, format);
+	while (format[i])
 	{
-		if (*format == '%')
+		if (format[i] == '%')
 		{
-			format++;
-			switch (*format)
+			i++;
+			switch (format[i])
 			{
 			case 'c':
-				putchar(va_arg(args, int));
+				_putchar(va_arg(args, int));
 				count++;
 				break;
 			case 's':
-				const char *str = va_arg(args, const char *);
+				str = va_arg(args, char *);
 				while (*str)
 				{
-					putchar(*str);
+					_putchar(*str);
 					str++;
 					count++;
 				}
 				break;
 			case '%':
-				putchar('%');
+				_putchar('%');
 				count++;
 				break;
 			default:
-				putchar('%');
-				putchar(*format);
+				_putchar('%');
+				_putchar(format[i]);
 				count += 2;
-				break;
 			}
 		}
 		else
 		{
-			putchar(*format);
+			_putchar(format[i]);
 			count++;
 		}
-		format++;
+		i++;
 	}
 	va_end(args);
 	return (count);

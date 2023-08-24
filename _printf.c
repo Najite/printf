@@ -3,51 +3,50 @@
  * _printf - produces output according to a format
  * @format: character string composed of zero or more directives
  *
- * Return: the number of characters printed (excluding the null byte used to end output to strings)
+ * Return: the number of characters printed (excluding the null byte used to
+ * end output to strings)
  */
 int _printf(const char *format, ...)
 {
 	va_list args;
-	int i = 0, count = 0;
-	char *str;
+	int count = 0;
+	char c;
 
 	va_start(args, format);
-	while (format[i])
+	while (*format)
 	{
-		if (format[i] == '%')
+		if (*format == '%')
 		{
-			i++;
-			switch (format[i])
+			format++;
+			switch (*format)
 			{
 			case 'c':
-				_putchar(va_arg(args, int));
-				count++;
+				c = va_arg(args, int);
+				count += _putchar(c);
 				break;
 			case 's':
-				str = va_arg(args, char *);
+			{
+				char *str = va_arg(args, char *);
+
 				while (*str)
 				{
-					_putchar(*str);
+					count += _putchar(*str);
 					str++;
-					count++;
 				}
-				break;
+			}
+			break;
 			case '%':
-				_putchar('%');
-				count++;
+				count += _putchar('%');
 				break;
 			default:
-				_putchar('%');
-				_putchar(format[i]);
-				count += 2;
+				break;
 			}
 		}
 		else
 		{
-			_putchar(format[i]);
-			count++;
+			count += _putchar(*format);
 		}
-		i++;
+		format++;
 	}
 	va_end(args);
 	return (count);
